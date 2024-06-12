@@ -1,0 +1,122 @@
+{% extends "news/base.html" %}
+{% load static %}
+<title>
+    {% block title %}
+    
+    {{ news_item.title }}
+    
+    {% endblock title %}</title>
+    
+    
+    
+    {% block Meta_Description %}
+    
+    <meta name="description" content="{{ news_item.content|striptags|truncatewords:20 }}">
+    
+    {% endblock Meta_Description %}
+    
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+            
+                {% if news_item.image %}
+                    <img src="{{ news_item.image.url }}" class="card-img-top" alt="{{ news_item.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h1 class="card-title">{{ news_item.title }}</h1>
+                    <p class="card-text">{{ news_item.content|safe }}</p>
+                    <br><br>
+                    <p class="card-text">{{ news_item.content1|safe }}</p>
+                    
+                    {% if news_item.video %}
+                        <video controls width="100%">
+                            <source src="{{ news_item.video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    {% endif %}
+                    {% if news_item.audio %}
+                        <audio controls width="100%">
+                            <source src="{{ news_item.audio.url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h3>Related Posts</h3>
+            <ul class="list-group">
+                {% for related in related_posts %}
+                    <li class="list-group-item">
+                        <a href="{% url 'news_detail' related.slug %}">{{ related.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-5">
+        <h1>{{ post.title }}</h1>
+        <div class="content">
+            {{ post.content|safe }}
+        </div>
+
+        <h2>Related Posts</h2>
+        <div class="row">
+            {% for related_post in related_posts %}
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    {% if related_post.image %}
+                    <img src="{{ related_post.image.url }}" class="card-img-top" alt="{{ related_post.title }}">
+                    {% else %}
+                    <img src="{% static 'default.png' %}" class="card-img-top" alt="Default image">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ related_post.title }}</h5>
+                        <p class="card-text">{{ related_post.content|safe|truncatewords:10 }}</p>
+                        <a href="{{ related_post.get_absolute_url }}" class="btn btn-primary mt-auto">Read More</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+ {% comment %} {% if related_posts1 %}
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="mb-4">Random Related Posts</h2>
+        <div class="row">
+            {% for related_post in related_posts1 %}
+            <div class="col-md-3">
+                <div class="card mb-4 shadow-sm">
+                    {% if related_post.image %}
+                    <img src="{{ related_post.image.url }}" class="card-img-top" alt="{{ related_post.title }}">
+                    {% else %}
+                    <img src="{% static 'default.png' %}" class="card-img-top" alt="Default image">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ related_post.title }}</h5>
+                        <p class="card-text">{{ related_post.content|truncatewords:20 }}</p>
+                        <a href="{{ related_post.get_absolute_url }}" class="btn btn-primary btn-sm">Read More</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %} {% endcomment %}
+
+ {% comment %} <h1>{{ news_item.title }}</h1>
+    <div>
+        {{ news_item.content|safe }}
+    </div> {% endcomment %}
+    {% comment %} <a href="{% url 'news_item' %}">Back to Posts</a> {% endcomment %}
+
+{% endblock content %} 
+
